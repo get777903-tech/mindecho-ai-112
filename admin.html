@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindEcho AI — Панель Модератора</title>
+<title>MindEcho AI - ?????? ??????????</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -67,127 +67,107 @@ tr:hover td{background:rgba(255,255,255,0.03)}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-size:13px;z-index:999;display:none}
 .no-data{text-align:center;padding:30px;color:var(--muted);font-size:14px}
 </style>
-  <!-- Firebase Compat (v10) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBedgxqbS_OY15MH2Fk3XZ2GCe95kUfP-w",
-      authDomain: "mindecho-ai-db.firebaseapp.com",
-      projectId: "mindecho-ai-db",
-      storageBucket: "mindecho-ai-db.firebasestorage.app",
-      messagingSenderId: "209923903712",
-      appId: "1:209923903712:web:77b5fe325b8743d984c085",
-      measurementId: "G-W2M51QG81P"
-    };
-    try {
-      if (firebaseConfig.apiKey) {
-        firebase.initializeApp(firebaseConfig);
-        window.db = firebase.firestore();
-      }
-    } catch(e) { console.log(e); }
-  </script>
 </head>
 <body>
-<div id="loading-overlay"><div class="spinner"></div><p style="color:var(--muted);font-size:14px">Загрузка аналитики...</p></div>
+<div id="loading-overlay"><div class="spinner"></div><p style="color:var(--muted);font-size:14px">???????? ?????????...</p></div>
 
 <div id="login-screen">
 <div class="login-card">
-<div class="login-logo">🧠</div>
+<div class="login-logo">??</div>
 <div class="login-title">MindEcho AI</div>
-<div class="login-sub">Панель модератора — аналитика и KPI</div>
-<input id="pwd-input" class="login-input" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkLogin()">
-<button class="login-btn" onclick="checkLogin()">🔐 Войти в панель</button>
-<div class="login-error" id="login-error">❌ Неверный пароль</div>
+<div class="login-sub">?????? ?????????? - ????????? ? KPI</div>
+<input id="pwd-input" class="login-input" type="password" placeholder="........" onkeydown="if(event.key==='Enter')checkLogin()">
+<button class="login-btn" onclick="checkLogin()">?? ????? ? ??????</button>
+<div class="login-error" id="login-error">? ???????? ??????</div>
 </div>
 </div>
 
 <div id="dashboard">
 <div class="topbar">
-<div class="topbar-brand"><span style="font-size:26px">🧠</span><span class="topbar-title">MindEcho AI — Панель Модератора</span></div>
+<div class="topbar-brand"><span style="font-size:26px">??</span><span class="topbar-title">MindEcho AI - ?????? ??????????</span></div>
 <div class="topbar-right">
-<div class="live-badge"><div class="live-dot"></div>Live • 30с</div>
-<button class="refresh-btn" onclick="loadData()">↻ Обновить</button>
-<button class="logout-btn" onclick="logout()">Выйти</button>
+<div class="live-badge"><div class="live-dot"></div>Live . 30?</div>
+<button class="refresh-btn" onclick="loadData()">? ????????</button>
+<button class="logout-btn" onclick="logout()">?????</button>
 </div>
 </div>
 
 <div class="main">
-<div class="section-label">📊 Ключевые Показатели KPI</div>
+<div class="section-label">?? ???????? ?????????? KPI</div>
 <div class="kpi-grid">
-<div class="kpi-card c1"><div class="kpi-icon">👁</div><div class="kpi-val" id="k-visits">—</div><div class="kpi-label">Визитов на сайт</div><div class="kpi-sub" id="k-sessions">— сессий</div></div>
-<div class="kpi-card c2"><div class="kpi-icon">🖱</div><div class="kpi-val" id="k-events">—</div><div class="kpi-label">Всего событий</div><div class="kpi-sub" id="k-etypes">— типов</div></div>
-<div class="kpi-card c3"><div class="kpi-icon">💳</div><div class="kpi-val" id="k-buys">—</div><div class="kpi-label">Попыток купить</div><div class="kpi-sub" id="k-conv">конверсия —%</div></div>
-<div class="kpi-card c4"><div class="kpi-icon">📧</div><div class="kpi-val" id="k-emails">—</div><div class="kpi-label">Уникальных Email</div><div class="kpi-sub" id="k-phones">— телефонов</div></div>
-<div class="kpi-card c5"><div class="kpi-icon">🎵</div><div class="kpi-val" id="k-plays">—</div><div class="kpi-label">Воспроизведений</div><div class="kpi-sub" id="k-gen">— генераций</div></div>
-<div class="kpi-card c1"><div class="kpi-icon">🎙</div><div class="kpi-val" id="k-voices">—</div><div class="kpi-label">Записей голоса</div><div class="kpi-sub" id="k-nda">— NDA подписей</div></div>
-<div class="kpi-card c2"><div class="kpi-icon">📱</div><div class="kpi-val" id="k-mobile">—%</div><div class="kpi-label">Mobile трафик</div><div class="kpi-sub" id="k-desktop">—% desktop</div></div>
-<div class="kpi-card c3"><div class="kpi-icon">📜</div><div class="kpi-val" id="k-scroll">—%</div><div class="kpi-label">Средн. скролл</div><div class="kpi-sub" id="k-time">время —с</div></div>
+<div class="kpi-card c1"><div class="kpi-icon">??</div><div class="kpi-val" id="k-visits">-</div><div class="kpi-label">??????? ?? ????</div><div class="kpi-sub" id="k-sessions">- ??????</div></div>
+<div class="kpi-card c2"><div class="kpi-icon">??</div><div class="kpi-val" id="k-events">-</div><div class="kpi-label">????? ???????</div><div class="kpi-sub" id="k-etypes">- ?????</div></div>
+<div class="kpi-card c3"><div class="kpi-icon">??</div><div class="kpi-val" id="k-buys">-</div><div class="kpi-label">??????? ??????</div><div class="kpi-sub" id="k-conv">????????? -%</div></div>
+<div class="kpi-card c4"><div class="kpi-icon">??</div><div class="kpi-val" id="k-emails">-</div><div class="kpi-label">?????????? Email</div><div class="kpi-sub" id="k-phones">- ?????????</div></div>
+<div class="kpi-card c5"><div class="kpi-icon">??</div><div class="kpi-val" id="k-plays">-</div><div class="kpi-label">???????????????</div><div class="kpi-sub" id="k-gen">- ?????????</div></div>
+<div class="kpi-card c1"><div class="kpi-icon">??</div><div class="kpi-val" id="k-voices">-</div><div class="kpi-label">??????? ??????</div><div class="kpi-sub" id="k-nda">- NDA ????????</div></div>
+<div class="kpi-card c2"><div class="kpi-icon">??</div><div class="kpi-val" id="k-mobile">-%</div><div class="kpi-label">Mobile ??????</div><div class="kpi-sub" id="k-desktop">-% desktop</div></div>
+<div class="kpi-card c3"><div class="kpi-icon">??</div><div class="kpi-val" id="k-scroll">-%</div><div class="kpi-label">?????. ??????</div><div class="kpi-sub" id="k-time">????? -?</div></div>
 </div>
 
 <div class="two-col">
-<div class="panel"><div class="panel-title"><span>🔽</span>Воронка продаж</div><div id="funnel-wrap"><div class="no-data">Загрузка...</div></div></div>
-<div class="panel"><div class="panel-title"><span>🖱</span>Статистика по кнопкам</div><div id="btn-wrap"><div class="no-data">Загрузка...</div></div></div>
+<div class="panel"><div class="panel-title"><span>??</span>??????? ??????</div><div id="funnel-wrap"><div class="no-data">????????...</div></div></div>
+<div class="panel"><div class="panel-title"><span>??</span>?????????? ?? ???????</div><div id="btn-wrap"><div class="no-data">????????...</div></div></div>
 </div>
 
 <div class="two-col">
-<div class="panel"><div class="panel-title"><span>📈</span>Активность по часам</div><div class="chart-wrap"><canvas id="hourly-chart"></canvas></div></div>
-<div class="panel"><div class="panel-title"><span>🌍</span>Источники трафика</div><div class="chart-wrap"><canvas id="ref-chart"></canvas></div></div>
+<div class="panel"><div class="panel-title"><span>??</span>?????????? ?? ?????</div><div class="chart-wrap"><canvas id="hourly-chart"></canvas></div></div>
+<div class="panel"><div class="panel-title"><span>??</span>????????? ???????</div><div class="chart-wrap"><canvas id="ref-chart"></canvas></div></div>
 </div>
 
 <div class="two-col" style="margin-bottom:24px">
-<div class="panel"><div class="panel-title"><span>👶</span>Топ имён детей</div><div id="names-wrap"><div class="no-data">Загрузка...</div></div></div>
-<div class="panel"><div class="panel-title"><span>📱</span>Устройства</div><div class="chart-wrap"><canvas id="dev-chart"></canvas></div></div>
+<div class="panel"><div class="panel-title"><span>??</span>??? ???? ?????</div><div id="names-wrap"><div class="no-data">????????...</div></div></div>
+<div class="panel"><div class="panel-title"><span>??</span>??????????</div><div class="chart-wrap"><canvas id="dev-chart"></canvas></div></div>
 </div>
 
 <div class="panel" style="margin-bottom:24px">
-<div class="panel-title"><span>🎁</span>Таблица отзывов и вопросов (Опрос + Подарки)</div>
+<div class="panel-title"><span>??</span>??????? ??????? ? ???????? (????? + ???????)</div>
 <div class="table-toolbar">
 <select class="table-filter" id="f-review-scen" onchange="renderReviewsTable()">
-<option value="">Все сценарии опроса</option>
-<option value="burnout">🟢 1. Выгорание родителей</option>
-<option value="tantrums">🔵 2. Истерики и капризы</option>
-<option value="confidence">🟡 3. Уверенность ребёнка</option>
-<option value="expert">🟣 4. Эксперт / Психолог</option>
+<option value="">??? ???????? ??????</option>
+<option value="burnout">?? 1. ????????? ?????????</option>
+<option value="tantrums">?? 2. ???????? ? ???????</option>
+<option value="confidence">?? 3. ??????????? ???????</option>
+<option value="expert">?? 4. ??????? / ????????</option>
 </select>
-<button class="export-btn" onclick="exportReviewsCSV()">⬇ Экспорт Отзывов (CSV)</button>
+<button class="export-btn" onclick="exportReviewsCSV()">? ??????? ??????? (CSV)</button>
 <span id="rev-count" style="color:var(--muted);font-size:12px;margin-left:auto"></span>
 </div>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Дата/Время</th><th>Имя</th><th>WhatsApp / TG / Email</th><th>Сценарий</th><th>Ответы на опрос / Отзыв</th><th>Статус подарка</th></tr></thead>
+<thead><tr><th>????/?????</th><th>???</th><th>WhatsApp / TG / Email</th><th>????????</th><th>?????? ?? ????? / ?????</th><th>?????? ???????</th></tr></thead>
 <tbody id="rev-body"></tbody>
 </table>
 </div>
 </div>
 
 <div class="panel" style="margin-bottom:28px">
-<div class="panel-title"><span>👤</span>Список посетителей — Email / WhatsApp/TG / Имя</div>
+<div class="panel-title"><span>??</span>?????? ??????????? - Email / WhatsApp/TG / ???</div>
 <div class="table-toolbar">
 <select class="table-filter" id="f-event" onchange="renderTable()">
-<option value="">Все события</option>
-<option value="Buy">💳 Покупка</option>
-<option value="Page_View">👁 Визиты</option>
-<option value="Play_Click">🎵 Воспроизведение</option>
-<option value="NDA_Signed">✅ NDA</option>
-<option value="Voice_Recorded">🎙 Запись голоса</option>
-<option value="Email_Registration">📧 Email регистрация</option>
-<option value="Engaged">⏱ Вовлечённые</option>
+<option value="">??? ???????</option>
+<option value="Buy">?? ???????</option>
+<option value="Page_View">?? ??????</option>
+<option value="Play_Click">?? ???????????????</option>
+<option value="NDA_Signed">? NDA</option>
+<option value="Voice_Recorded">?? ?????? ??????</option>
+<option value="Email_Registration">?? Email ???????????</option>
+<option value="Engaged">? ???????????</option>
 </select>
 <select class="table-filter" id="f-lead" onchange="renderTable()">
-<option value="">Все посетители</option>
-<option value="email">С Email</option>
-<option value="phone">С WhatsApp/TG</option>
-<option value="leads">Лиды (контакты)</option>
+<option value="">??? ??????????</option>
+<option value="email">? Email</option>
+<option value="phone">? WhatsApp/TG</option>
+<option value="leads">???? (????????)</option>
 </select>
-<button class="copy-btn" onclick="copyEmails()">📋 Копировать Email</button>
-<button class="copy-btn" onclick="copyPhones()">📞 Копировать WhatsApp/TG</button>
-<button class="export-btn" onclick="exportCSV()">⬇ Экспорт CSV</button>
+<button class="copy-btn" onclick="copyEmails()">?? ?????????? Email</button>
+<button class="copy-btn" onclick="copyPhones()">?? ?????????? WhatsApp/TG</button>
+<button class="export-btn" onclick="exportCSV()">? ??????? CSV</button>
 <span id="tbl-count" style="color:var(--muted);font-size:12px;margin-left:auto"></span>
 </div>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Время</th><th>Email</th><th>WhatsApp/TG</th><th>Имя</th><th>Событие</th><th>Раздел</th><th>Скролл%</th><th>Время с</th><th>Устройство</th><th>Источник</th><th>Тариф</th></tr></thead>
+<thead><tr><th>?????</th><th>Email</th><th>WhatsApp/TG</th><th>???</th><th>???????</th><th>??????</th><th>??????%</th><th>????? ?</th><th>??????????</th><th>????????</th><th>?????</th></tr></thead>
 <tbody id="tbl-body"></tbody>
 </table>
 </div>
@@ -215,35 +195,11 @@ function checkLogin(){
 }
 function logout(){sessionStorage.removeItem('mea');location.reload();}
 
-function parseDateStr(str) {
-  if(!str) return 0;
-  let p = str.split(/[., :]/);
-  if(p.length>=5) return new Date(p[2], p[1]-1, p[0], p[3], p[4], p[5]||0).getTime();
-  return new Date(str).getTime();
-}
-
 async function loadData(){
-  if (window.db) {
-    try {
-      const snap = await window.db.collection("analytics").get();
-      allRows = snap.docs.map(d => d.data());
-      allRows.sort((a,b) => parseDateStr(b.timestamp) - parseDateStr(a.timestamp));
-      stats = buildStats(allRows);
-      renderAll();
-      showToast('Loaded from Firebase (Real-time)');
-      return;
-    } catch(e) { console.log(e); }
-  }
-
   try{
     const r=await fetch(READ_URL);
     const j=await r.json();
-    if(j.status==='success'){
-      allRows=j.rows||[];
-      allRows.sort((a,b) => parseDateStr(b.timestamp) - parseDateStr(a.timestamp));
-      stats=j.stats||{}; 
-      renderAll();
-    }
+    if(j.status==='success'){allRows=j.rows||[];stats=j.stats||{}; renderAll();}
     else loadDemo();
   }catch(e){loadDemo();}
 }
@@ -252,7 +208,7 @@ let reviewsData = [];
 
 function loadDemo(){
   const evs=['Page_View','Generate_Click','Play_Click','Pricing_Viewed','Buy_Premium_Click','Buy_Basic_Click','Voice_Recorded','NDA_Signed','Engaged_30s','Engaged_60s','Auth_Modal_Opened','Emergency_Click'];
-  const names=['Мария','Анна','Елена','Ольга','Александр','Надежда'];
+  const names=['?????','????','?????','?????','?????????','???????'];
   const emails=['user@gmail.com','anna@mail.ru','mama@yandex.ru','olga@icloud.com','elena@mail.ru'];
   const phones=['+7-999-123-45-67','+7-912-456-78-90'];
   const devs=['mobile','mobile','mobile','desktop','tablet'];
@@ -282,16 +238,15 @@ function loadDemo(){
     });
   }
   reviewsData = [
-    { timestamp: '01.08.2026, 15:42', name: 'Анна М.', contact: '+7 (912) 456-78-90 (WA)', scenario: 'burnout', scenarioTitle: '🟢 Выгорание', answers: '1) Усталость вечером: 9/10. 2) Мечтаю о медитации голосом мамы. 3) Приложение очень нужно для мамы!', status: '🎁 Подарок выдан' },
-    { timestamp: '01.08.2026, 14:15', name: 'Елена В.', contact: '@elena_parent (TG)', scenario: 'tantrums', scenarioTitle: '🔵 Истерики', answers: '1) Частота капризов перед сном: 4-5 раз в неделю. 2) Готова платить за экспресс-режим. 3) Спасибо за подарок!', status: '🎁 Подарок выдан' },
-    { timestamp: '01.08.2026, 13:08', name: 'Ольга К.', contact: 'olga_m@icloud.com', scenario: 'confidence', scenarioTitle: '🟡 Уверенность', answers: '1) Ребенок стеснительный в детсаду. 2) Нужен утренний настрой на уверенность. 3) Прошла опрос ради VIP-доступа.', status: '⏳ В обработке' },
-    { timestamp: '01.08.2026, 11:30', name: 'Дмитрий С.', contact: '+7 (903) 777-88-99 (WA)', scenario: 'expert', scenarioTitle: '🟣 Эксперт', answers: '1) Детский нейропсихолог. 2) Интересует валидация Агентом-Супервизором. 3) Хочу сотрудничество.', status: '🎁 Подарок выдан' },
-    { timestamp: '31.07.2026, 19:22', name: 'Надежда П.', contact: '@nadya_mama (TG)', scenario: 'burnout', scenarioTitle: '🟢 Выгорание', answers: '1) Не хватает 1-2 часов личного времени в день. 2) Рассказы-медитации супер! 3) Подарок получен.', status: '🎁 Подарок выдан' }
+    { timestamp: '01.08.2026, 15:42', name: '???? ?.', contact: '+7 (912) 456-78-90 (WA)', scenario: 'burnout', scenarioTitle: '?? ?????????', answers: '1) ????????? ???????: 9/10. 2) ?????? ? ????????? ??????? ????. 3) ?????????? ????? ????? ??? ????!', status: '?? ??????? ?????' },
+    { timestamp: '01.08.2026, 14:15', name: '????? ?.', contact: '@elena_parent (TG)', scenario: 'tantrums', scenarioTitle: '?? ????????', answers: '1) ??????? ???????? ????? ????: 4-5 ??? ? ??????. 2) ?????? ??????? ?? ????????-?????. 3) ??????? ?? ???????!', status: '?? ??????? ?????' },
+    { timestamp: '01.08.2026, 13:08', name: '????? ?.', contact: 'olga_m@icloud.com', scenario: 'confidence', scenarioTitle: '?? ???????????', answers: '1) ??????? ????????????? ? ???????. 2) ????? ???????? ??????? ?? ???????????. 3) ?????? ????? ???? VIP-???????.', status: '? ? ?????????' },
+    { timestamp: '01.08.2026, 11:30', name: '??????? ?.', contact: '+7 (903) 777-88-99 (WA)', scenario: 'expert', scenarioTitle: '?? ???????', answers: '1) ??????? ?????????????. 2) ?????????? ????????? ???????-????????????. 3) ???? ??????????????.', status: '?? ??????? ?????' },
+    { timestamp: '31.07.2026, 19:22', name: '??????? ?.', contact: '@nadya_mama (TG)', scenario: 'burnout', scenarioTitle: '?? ?????????', answers: '1) ?? ??????? 1-2 ????? ??????? ??????? ? ????. 2) ????????-????????? ?????! 3) ??????? ???????.', status: '?? ??????? ?????' }
   ];
-  allRows.sort((a,b) => parseDateStr(b.timestamp) - parseDateStr(a.timestamp));
   stats=buildStats(allRows);
   renderAll();
-  showToast('Demo-данные. Задеплойте Apps Script для реальных данных.');
+  showToast('Demo-??????. ?????????? Apps Script ??? ???????? ??????.');
 }
 
 function buildStats(rows){
@@ -329,21 +284,21 @@ function renderAll(){
   const dv=s.devices||{},mob=dv.mobile||0,des=dv.desktop||0,tab=(dv.tablet||0);
   const tot=mob+des+tab||1;
   animNum(document.getElementById('k-visits'),pv);
-  document.getElementById('k-sessions').textContent=(s.unique_sessions||0)+' сессий';
+  document.getElementById('k-sessions').textContent=(s.unique_sessions||0)+' ??????';
   animNum(document.getElementById('k-events'),s.total_events||0);
-  document.getElementById('k-etypes').textContent=Object.keys(ec).length+' типов';
+  document.getElementById('k-etypes').textContent=Object.keys(ec).length+' ?????';
   animNum(document.getElementById('k-buys'),buys);
-  document.getElementById('k-conv').textContent='конверсия '+(pv>0?Math.round(buys/pv*100):0)+'%';
+  document.getElementById('k-conv').textContent='????????? '+(pv>0?Math.round(buys/pv*100):0)+'%';
   animNum(document.getElementById('k-emails'),s.unique_emails||0);
-  document.getElementById('k-phones').textContent=(s.unique_phones||0)+' телефонов';
+  document.getElementById('k-phones').textContent=(s.unique_phones||0)+' ?????????';
   animNum(document.getElementById('k-plays'),f.plays||0);
-  document.getElementById('k-gen').textContent=(f.meditations||0)+' генераций';
+  document.getElementById('k-gen').textContent=(f.meditations||0)+' ?????????';
   animNum(document.getElementById('k-voices'),f.voices_recorded||0);
-  document.getElementById('k-nda').textContent=(f.nda_signed||0)+' NDA подписей';
+  document.getElementById('k-nda').textContent=(f.nda_signed||0)+' NDA ????????';
   document.getElementById('k-mobile').textContent=Math.round(mob/tot*100)+'%';
   document.getElementById('k-desktop').textContent=Math.round(des/tot*100)+'% desktop';
   document.getElementById('k-scroll').textContent=(s.avg_scroll_depth||0)+'%';
-  document.getElementById('k-time').textContent='время '+(s.avg_time_on_page||0)+'с';
+  document.getElementById('k-time').textContent='????? '+(s.avg_time_on_page||0)+'?';
   renderFunnel(f,pv);
   renderBtns(ec);
   renderCharts();
@@ -354,13 +309,13 @@ function renderAll(){
 
 function renderFunnel(f,pv){
   const steps=[
-    {l:'👁 Зашли на сайт',c:f.page_views||0,col:'#F97316'},
-    {l:'💰 Просмотрели цены',c:f.pricing_views||0,col:'#FB923C'},
-    {l:'🛒 Нажали купить',c:f.plan_clicks||0,col:'#22C55E'},
-    {l:'💳 Попытка оплаты',c:f.payment_intents||0,col:'#06B6D4'},
-    {l:'✅ Подписали NDA',c:f.nda_signed||0,col:'#A855F7'},
-    {l:'🎵 Слушали медитацию',c:f.plays||0,col:'#EAB308'},
-    {l:'🎙 Записали голос',c:f.voices_recorded||0,col:'#F43F5E'},
+    {l:'?? ????? ?? ????',c:f.page_views||0,col:'#F97316'},
+    {l:'?? ??????????? ????',c:f.pricing_views||0,col:'#FB923C'},
+    {l:'?? ?????? ??????',c:f.plan_clicks||0,col:'#22C55E'},
+    {l:'?? ??????? ??????',c:f.payment_intents||0,col:'#06B6D4'},
+    {l:'? ????????? NDA',c:f.nda_signed||0,col:'#A855F7'},
+    {l:'?? ??????? ?????????',c:f.plays||0,col:'#EAB308'},
+    {l:'?? ???????? ?????',c:f.voices_recorded||0,col:'#F43F5E'},
   ];
   const mx=Math.max(...steps.map(s=>s.c),1);
   document.getElementById('funnel-wrap').innerHTML=steps.map(s=>{
@@ -375,12 +330,12 @@ function renderBtns(ec){
   const sorted=Object.entries(ec).sort((a,b)=>b[1]-a[1]).slice(0,14);
   const mx=sorted.length?sorted[0][1]:1;
   const cm={'Buy':'#22C55E','Play':'#06B6D4','Page_View':'#F97316','Pricing':'#EAB308','NDA':'#A855F7','Voice':'#F43F5E','Generate':'#3B82F6','Engaged':'#8B5CF6','Emergency':'#EF4444'};
-  const lm={'Page_View':'👁 Заход на сайт','Generate_Click':'✨ Генерация медитации','Play_Click':'▶ Воспроизведение','Pricing_Viewed':'💰 Просмотр цен','Buy_Basic_Click':'💳 Купить Basic','Buy_Premium_Click':'💳 Купить Premium','Buy_Pro_Click':'💳 Купить Pro','Voice_Recorded':'🎙 Запись голоса','NDA_Signed':'✅ NDA подпись','Engaged_30s':'⏱ 30с на сайте','Engaged_60s':'⏱ 60с на сайте','Engaged_120s':'⏱ 2мин на сайте','Emergency_Click':'🚨 Экстренный','Auth_Modal_Opened':'🔐 Вход','CustDev_Submitted':'📝 Опрос'};
+  const lm={'Page_View':'?? ????? ?? ????','Generate_Click':'? ????????? ?????????','Play_Click':'? ???????????????','Pricing_Viewed':'?? ???????? ???','Buy_Basic_Click':'?? ?????? Basic','Buy_Premium_Click':'?? ?????? Premium','Buy_Pro_Click':'?? ?????? Pro','Voice_Recorded':'?? ?????? ??????','NDA_Signed':'? NDA ???????','Engaged_30s':'? 30? ?? ?????','Engaged_60s':'? 60? ?? ?????','Engaged_120s':'? 2??? ?? ?????','Emergency_Click':'?? ??????????','Auth_Modal_Opened':'?? ????','CustDev_Submitted':'?? ?????'};
   function gc(n){for(const[k,v] of Object.entries(cm))if(n.includes(k))return v;return '#64748B';}
   document.getElementById('btn-wrap').innerHTML=sorted.map(([n,c])=>{
     const p=Math.round(c/mx*100);
     return '<div class="btn-stat-row"><div class="btn-stat-name">'+(lm[n]||n)+'</div><div class="btn-stat-bar-bg"><div class="btn-stat-fill" style="width:0%;background:'+gc(n)+'" data-w="'+p+'%"></div></div><div class="btn-stat-count">'+c+'</div></div>';
-  }).join('')||'<div class="no-data">Нет данных</div>';
+  }).join('')||'<div class="no-data">??? ??????</div>';
   setTimeout(()=>document.querySelectorAll('.btn-stat-fill').forEach(b=>b.style.width=b.dataset.w),50);
 }
 
@@ -388,21 +343,21 @@ function renderCharts(){
   const hc=stats.hourly_clicks||{};
   const hrs=Array.from({length:24},(_,i)=>String(i).padStart(2,'0'));
   if(hChart)hChart.destroy();
-  hChart=new Chart(document.getElementById('hourly-chart'),{type:'bar',data:{labels:hrs.map(h=>h+':00'),datasets:[{label:'Клики',data:hrs.map(h=>hc[h]||0),backgroundColor:'rgba(249,115,22,0.6)',borderColor:'#F97316',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#94A3B8',maxRotation:0,font:{size:9}},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#94A3B8',font:{size:10}},grid:{color:'rgba(255,255,255,0.05)'}}}}});
+  hChart=new Chart(document.getElementById('hourly-chart'),{type:'bar',data:{labels:hrs.map(h=>h+':00'),datasets:[{label:'?????',data:hrs.map(h=>hc[h]||0),backgroundColor:'rgba(249,115,22,0.6)',borderColor:'#F97316',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#94A3B8',maxRotation:0,font:{size:9}},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#94A3B8',font:{size:10}},grid:{color:'rgba(255,255,255,0.05)'}}}}});
   const rf=stats.referrers||{};
   const rk=Object.keys(rf).slice(0,6);
   if(rChart)rChart.destroy();
-  rChart=new Chart(document.getElementById('ref-chart'),{type:'doughnut',data:{labels:rk.length?rk:['Нет данных'],datasets:[{data:rk.length?rk.map(k=>rf[k]):[1],backgroundColor:['#F97316','#06B6D4','#22C55E','#A855F7','#EAB308','#EF4444'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{size:11},boxWidth:12}}}}});
+  rChart=new Chart(document.getElementById('ref-chart'),{type:'doughnut',data:{labels:rk.length?rk:['??? ??????'],datasets:[{data:rk.length?rk.map(k=>rf[k]):[1],backgroundColor:['#F97316','#06B6D4','#22C55E','#A855F7','#EAB308','#EF4444'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{size:11},boxWidth:12}}}}});
   const dv=stats.devices||{};
   const dk=Object.keys(dv);
-  const dl={'mobile':'📱 Mobile','desktop':'🖥 Desktop','tablet':'📱 Tablet','unknown':'❓'};
+  const dl={'mobile':'?? Mobile','desktop':'?? Desktop','tablet':'?? Tablet','unknown':'?'};
   if(dChart)dChart.destroy();
-  dChart=new Chart(document.getElementById('dev-chart'),{type:'doughnut',data:{labels:dk.length?dk.map(k=>dl[k]||k):['Нет'],datasets:[{data:dk.length?dk.map(k=>dv[k]):[1],backgroundColor:['#06B6D4','#F97316','#22C55E','#64748B'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{size:11},boxWidth:12}}}}});
+  dChart=new Chart(document.getElementById('dev-chart'),{type:'doughnut',data:{labels:dk.length?dk.map(k=>dl[k]||k):['???'],datasets:[{data:dk.length?dk.map(k=>dv[k]):[1],backgroundColor:['#06B6D4','#F97316','#22C55E','#64748B'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{size:11},boxWidth:12}}}}});
 }
 
 function renderNames(cn){
   const s=Object.entries(cn).sort((a,b)=>b[1]-a[1]).slice(0,20);
-  document.getElementById('names-wrap').innerHTML=s.length?s.map(([n,c])=>'<span class="name-pill">'+n+'<span class="name-cnt">'+c+'</span></span>').join(''):'<div class="no-data">Нет данных</div>';
+  document.getElementById('names-wrap').innerHTML=s.length?s.map(([n,c])=>'<span class="name-pill">'+n+'<span class="name-cnt">'+c+'</span></span>').join(''):'<div class="no-data">??? ??????</div>';
 }
 
 function renderReviewsTable(){
@@ -410,7 +365,7 @@ function renderReviewsTable(){
   let list = [...reviewsData];
   if(scFilter) list = list.filter(r => r.scenario === scFilter);
   const cntEl = document.getElementById('rev-count');
-  if(cntEl) cntEl.textContent = 'Показано отзывов: ' + list.length;
+  if(cntEl) cntEl.textContent = '???????? ???????: ' + list.length;
   const tbody = document.getElementById('rev-body');
   if(tbody) {
     tbody.innerHTML = list.map(r => `
@@ -420,19 +375,19 @@ function renderReviewsTable(){
         <td><span style="color:var(--cyan)">${r.contact}</span></td>
         <td>${r.scenarioTitle}</td>
         <td style="white-space:normal;min-width:280px;line-height:1.4">${r.answers}</td>
-        <td><span class="ev-badge ${r.status.includes('выдан')?'ev-buy':'ev-nda'}">${r.status}</span></td>
+        <td><span class="ev-badge ${r.status.includes('?????')?'ev-buy':'ev-nda'}">${r.status}</span></td>
       </tr>
-    `).join('') || '<tr><td colspan="6" class="no-data">Отзывов пока нет</td></tr>';
+    `).join('') || '<tr><td colspan="6" class="no-data">??????? ???? ???</td></tr>';
   }
 }
 
 function exportReviewsCSV(){
-  const h = ['Дата','Имя','Контакты','Сценарий','Ответы_Отзыв','Статус_Подарка'];
+  const h = ['????','???','????????','????????','??????_?????','??????_???????'];
   const r = reviewsData.map(r => [r.timestamp, r.name, r.contact, r.scenarioTitle, r.answers, r.status].map(v => '"' + (v||'').toString().replace(/"/g,'""') + '"').join(','));
   const csv = [h.join(','), ...r].join('\n');
   const b = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'mindecho_reviews_' + new Date().toISOString().split('T')[0] + '.csv'; a.click();
-  showToast('📥 Таблица отзывов сохранена в CSV!');
+  showToast('?? ??????? ??????? ????????? ? CSV!');
 }
 
 function renderTable(){
@@ -443,7 +398,7 @@ function renderTable(){
   if(lf==='email')rows=rows.filter(r=>r.email&&r.email!=='-');
   else if(lf==='phone')rows=rows.filter(r=>r.phone&&r.phone!=='-');
   else if(lf==='leads')rows=rows.filter(r=>(r.email&&r.email!=='-')||(r.phone&&r.phone!=='-'));
-  document.getElementById('tbl-count').textContent='Показано: '+rows.length+' из '+allRows.length;
+  document.getElementById('tbl-count').textContent='????????: '+rows.length+' ?? '+allRows.length;
   const cm={'Buy':'ev-buy','Play':'ev-play','Page_View':'ev-view','Engaged':'ev-engage','NDA':'ev-nda'};
   function ec(n){for(const[k,v]of Object.entries(cm))if(n&&n.includes(k))return v;return 'ev-def';}
   document.getElementById('tbl-body').innerHTML=rows.slice(0,200).map(r=>`
@@ -455,22 +410,22 @@ function renderTable(){
 <td><span class="ev-badge ${ec(r.event_type)}">${r.event_type||'-'}</span></td>
 <td style="color:var(--muted)">${r.page_section||'-'}</td>
 <td>${r.scroll_depth>0?'<span style="color:var(--orange)">'+r.scroll_depth+'%</span>':'-'}</td>
-<td>${r.time_on_page>0?r.time_on_page+'с':'-'}</td>
+<td>${r.time_on_page>0?r.time_on_page+'?':'-'}</td>
 <td>${r.device_type||'-'}</td>
 <td style="color:var(--muted)">${r.referrer||'-'}</td>
 <td>${r.plan_name&&r.plan_name!=='-'?'<span style="color:var(--yellow)">'+r.plan_name+'</span>':'-'}</td>
-</tr>`).join('')||'<tr><td colspan="11" class="no-data">Нет данных</td></tr>';
+</tr>`).join('')||'<tr><td colspan="11" class="no-data">??? ??????</td></tr>';
 }
 
-function copyEmails(){const l=(stats.email_list||[]).join('\n');navigator.clipboard.writeText(l).then(()=>showToast('Скопировано '+(stats.email_list||[]).length+' email'));}
-function copyPhones(){const l=(stats.phone_list||[]).join('\n');navigator.clipboard.writeText(l).then(()=>showToast('Скопировано '+(stats.phone_list||[]).length+' телефонов'));}
+function copyEmails(){const l=(stats.email_list||[]).join('\n');navigator.clipboard.writeText(l).then(()=>showToast('??????????? '+(stats.email_list||[]).length+' email'));}
+function copyPhones(){const l=(stats.phone_list||[]).join('\n');navigator.clipboard.writeText(l).then(()=>showToast('??????????? '+(stats.phone_list||[]).length+' ?????????'));}
 function exportCSV(){
-  const h=['Время','Email','Телефон','Имя','Событие','Раздел','Скролл%','Время_с','Устройство','Источник','Тариф','Цена'];
+  const h=['?????','Email','???????','???','???????','??????','??????%','?????_?','??????????','????????','?????','????'];
   const r=allRows.map(r=>[r.timestamp,r.email,r.phone,r.user_name,r.event_type,r.page_section,r.scroll_depth,r.time_on_page,r.device_type,r.referrer,r.plan_name,r.price].map(v=>'"'+(v||'').toString().replace(/"/g,'""')+'"').join(','));
   const csv=[h.join(','),...r].join('\n');
   const b=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='mindecho_leads_'+new Date().toISOString().split('T')[0]+'.csv';a.click();
-  showToast('CSV сохранён!');
+  showToast('CSV ????????!');
 }
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500);}
 
