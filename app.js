@@ -1424,4 +1424,3 @@ function registerServiceWorker() {
       .catch(err => console.log('PWA SW registration failed:', err));
   }
 }
-
