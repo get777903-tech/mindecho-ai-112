@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindEcho AI â€” ÐŸÐ°Ð½ÐµÐ»ÑŒ ÐœÐ¾Ð´ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ð°</title>
+<title>MindEcho AI — Панель Модератора</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -67,6 +67,7 @@ tr:hover td{background:rgba(255,255,255,0.03)}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-size:13px;z-index:999;display:none}
 .no-data{text-align:center;padding:30px;color:var(--muted);font-size:14px}
 </style>
+  <!-- Firebase Compat (v10) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script>
@@ -88,105 +89,105 @@ tr:hover td{background:rgba(255,255,255,0.03)}
   </script>
 </head>
 <body>
-<div id="loading-overlay"><div class="spinner"></div><p style="color:var(--muted);font-size:14px">Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° Ð°Ð½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐ¸...</p></div>
+<div id="loading-overlay"><div class="spinner"></div><p style="color:var(--muted);font-size:14px">Загрузка аналитики...</p></div>
 
 <div id="login-screen">
 <div class="login-card">
-<div class="login-logo">ðŸ§ </div>
+<div class="login-logo">🧠</div>
 <div class="login-title">MindEcho AI</div>
-<div class="login-sub">ÐŸÐ°Ð½ÐµÐ»ÑŒ Ð¼Ð¾Ð´ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ð° â€” Ð°Ð½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐ° Ð¸ KPI</div>
-<input id="pwd-input" class="login-input" type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" onkeydown="if(event.key==='Enter')checkLogin()">
-<button class="login-btn" onclick="checkLogin()">ðŸ” Ð’Ð¾Ð¹Ñ‚Ð¸ Ð² Ð¿Ð°Ð½ÐµÐ»ÑŒ</button>
-<div class="login-error" id="login-error">âŒ ÐÐµÐ²ÐµÑ€Ð½Ñ‹Ð¹ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ</div>
+<div class="login-sub">Панель модератора — аналитика и KPI</div>
+<input id="pwd-input" class="login-input" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkLogin()">
+<button class="login-btn" onclick="checkLogin()">🔐 Войти в панель</button>
+<div class="login-error" id="login-error">❌ Неверный пароль</div>
 </div>
 </div>
 
 <div id="dashboard">
 <div class="topbar">
-<div class="topbar-brand"><span style="font-size:26px">ðŸ§ </span><span class="topbar-title">MindEcho AI â€” ÐŸÐ°Ð½ÐµÐ»ÑŒ ÐœÐ¾Ð´ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ð°</span></div>
+<div class="topbar-brand"><span style="font-size:26px">🧠</span><span class="topbar-title">MindEcho AI — Панель Модератора</span></div>
 <div class="topbar-right">
-<div class="live-badge"><div class="live-dot"></div>Live â€¢ 30Ñ</div>
-<button class="refresh-btn" onclick="loadData()">â†» ÐžÐ±Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ</button>
-<button class="logout-btn" onclick="logout()">Ð’Ñ‹Ð¹Ñ‚Ð¸</button>
+<div class="live-badge"><div class="live-dot"></div>Live • 30с</div>
+<button class="refresh-btn" onclick="loadData()">↻ Обновить</button>
+<button class="logout-btn" onclick="logout()">Выйти</button>
 </div>
 </div>
 
 <div class="main">
-<div class="section-label">ðŸ“Š ÐšÐ»ÑŽÑ‡ÐµÐ²Ñ‹Ðµ ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÐµÐ»Ð¸ KPI</div>
+<div class="section-label">📊 Ключевые Показатели KPI</div>
 <div class="kpi-grid">
-<div class="kpi-card c1"><div class="kpi-icon">ðŸ‘</div><div class="kpi-val" id="k-visits">â€”</div><div class="kpi-label">Ð’Ð¸Ð·Ð¸Ñ‚Ð¾Ð² Ð½Ð° ÑÐ°Ð¹Ñ‚</div><div class="kpi-sub" id="k-sessions">â€” ÑÐµÑÑÐ¸Ð¹</div></div>
-<div class="kpi-card c2"><div class="kpi-icon">ðŸ–±</div><div class="kpi-val" id="k-events">â€”</div><div class="kpi-label">Ð’ÑÐµÐ³Ð¾ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ð¹</div><div class="kpi-sub" id="k-etypes">â€” Ñ‚Ð¸Ð¿Ð¾Ð²</div></div>
-<div class="kpi-card c3"><div class="kpi-icon">ðŸ’³</div><div class="kpi-val" id="k-buys">â€”</div><div class="kpi-label">ÐŸÐ¾Ð¿Ñ‹Ñ‚Ð¾Ðº ÐºÑƒÐ¿Ð¸Ñ‚ÑŒ</div><div class="kpi-sub" id="k-conv">ÐºÐ¾Ð½Ð²ÐµÑ€ÑÐ¸Ñ â€”%</div></div>
-<div class="kpi-card c4"><div class="kpi-icon">ðŸ“§</div><div class="kpi-val" id="k-emails">â€”</div><div class="kpi-label">Ð£Ð½Ð¸ÐºÐ°Ð»ÑŒÐ½Ñ‹Ñ… Email</div><div class="kpi-sub" id="k-phones">â€” Ñ‚ÐµÐ»ÐµÑ„Ð¾Ð½Ð¾Ð²</div></div>
-<div class="kpi-card c5"><div class="kpi-icon">ðŸŽµ</div><div class="kpi-val" id="k-plays">â€”</div><div class="kpi-label">Ð’Ð¾ÑÐ¿Ñ€Ð¾Ð¸Ð·Ð²ÐµÐ´ÐµÐ½Ð¸Ð¹</div><div class="kpi-sub" id="k-gen">â€” Ð³ÐµÐ½ÐµÑ€Ð°Ñ†Ð¸Ð¹</div></div>
-<div class="kpi-card c1"><div class="kpi-icon">ðŸŽ™</div><div class="kpi-val" id="k-voices">â€”</div><div class="kpi-label">Ð—Ð°Ð¿Ð¸ÑÐµÐ¹ Ð³Ð¾Ð»Ð¾ÑÐ°</div><div class="kpi-sub" id="k-nda">â€” NDA Ð¿Ð¾Ð´Ð¿Ð¸ÑÐµÐ¹</div></div>
-<div class="kpi-card c2"><div class="kpi-icon">ðŸ“±</div><div class="kpi-val" id="k-mobile">â€”%</div><div class="kpi-label">Mobile Ñ‚Ñ€Ð°Ñ„Ð¸Ðº</div><div class="kpi-sub" id="k-desktop">â€”% desktop</div></div>
-<div class="kpi-card c3"><div class="kpi-icon">ðŸ“œ</div><div class="kpi-val" id="k-scroll">â€”%</div><div class="kpi-label">Ð¡Ñ€ÐµÐ´Ð½. ÑÐºÑ€Ð¾Ð»Ð»</div><div class="kpi-sub" id="k-time">Ð²Ñ€ÐµÐ¼Ñ â€”Ñ</div></div>
+<div class="kpi-card c1"><div class="kpi-icon">👁</div><div class="kpi-val" id="k-visits">—</div><div class="kpi-label">Визитов на сайт</div><div class="kpi-sub" id="k-sessions">— сессий</div></div>
+<div class="kpi-card c2"><div class="kpi-icon">🖱</div><div class="kpi-val" id="k-events">—</div><div class="kpi-label">Всего событий</div><div class="kpi-sub" id="k-etypes">— типов</div></div>
+<div class="kpi-card c3"><div class="kpi-icon">💳</div><div class="kpi-val" id="k-buys">—</div><div class="kpi-label">Попыток купить</div><div class="kpi-sub" id="k-conv">конверсия —%</div></div>
+<div class="kpi-card c4"><div class="kpi-icon">📧</div><div class="kpi-val" id="k-emails">—</div><div class="kpi-label">Уникальных Email</div><div class="kpi-sub" id="k-phones">— телефонов</div></div>
+<div class="kpi-card c5"><div class="kpi-icon">🎵</div><div class="kpi-val" id="k-plays">—</div><div class="kpi-label">Воспроизведений</div><div class="kpi-sub" id="k-gen">— генераций</div></div>
+<div class="kpi-card c1"><div class="kpi-icon">🎙</div><div class="kpi-val" id="k-voices">—</div><div class="kpi-label">Записей голоса</div><div class="kpi-sub" id="k-nda">— NDA подписей</div></div>
+<div class="kpi-card c2"><div class="kpi-icon">📱</div><div class="kpi-val" id="k-mobile">—%</div><div class="kpi-label">Mobile трафик</div><div class="kpi-sub" id="k-desktop">—% desktop</div></div>
+<div class="kpi-card c3"><div class="kpi-icon">📜</div><div class="kpi-val" id="k-scroll">—%</div><div class="kpi-label">Средн. скролл</div><div class="kpi-sub" id="k-time">время —с</div></div>
 </div>
 
 <div class="two-col">
-<div class="panel"><div class="panel-title"><span>ðŸ”½</span>Ð’Ð¾Ñ€Ð¾Ð½ÐºÐ° Ð¿Ñ€Ð¾Ð´Ð°Ð¶</div><div id="funnel-wrap"><div class="no-data">Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ°...</div></div></div>
-<div class="panel"><div class="panel-title"><span>ðŸ–±</span>Ð¡Ñ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÐ° Ð¿Ð¾ ÐºÐ½Ð¾Ð¿ÐºÐ°Ð¼</div><div id="btn-wrap"><div class="no-data">Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ°...</div></div></div>
+<div class="panel"><div class="panel-title"><span>🔽</span>Воронка продаж</div><div id="funnel-wrap"><div class="no-data">Загрузка...</div></div></div>
+<div class="panel"><div class="panel-title"><span>🖱</span>Статистика по кнопкам</div><div id="btn-wrap"><div class="no-data">Загрузка...</div></div></div>
 </div>
 
 <div class="two-col">
-<div class="panel"><div class="panel-title"><span>ðŸ“ˆ</span>ÐÐºÑ‚Ð¸Ð²Ð½Ð¾ÑÑ‚ÑŒ Ð¿Ð¾ Ñ‡Ð°ÑÐ°Ð¼</div><div class="chart-wrap"><canvas id="hourly-chart"></canvas></div></div>
-<div class="panel"><div class="panel-title"><span>ðŸŒ</span>Ð˜ÑÑ‚Ð¾Ñ‡Ð½Ð¸ÐºÐ¸ Ñ‚Ñ€Ð°Ñ„Ð¸ÐºÐ°</div><div class="chart-wrap"><canvas id="ref-chart"></canvas></div></div>
+<div class="panel"><div class="panel-title"><span>📈</span>Активность по часам</div><div class="chart-wrap"><canvas id="hourly-chart"></canvas></div></div>
+<div class="panel"><div class="panel-title"><span>🌍</span>Источники трафика</div><div class="chart-wrap"><canvas id="ref-chart"></canvas></div></div>
 </div>
 
 <div class="two-col" style="margin-bottom:24px">
-<div class="panel"><div class="panel-title"><span>ðŸ‘¶</span>Ð¢Ð¾Ð¿ Ð¸Ð¼Ñ‘Ð½ Ð´ÐµÑ‚ÐµÐ¹</div><div id="names-wrap"><div class="no-data">Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ°...</div></div></div>
-<div class="panel"><div class="panel-title"><span>ðŸ“±</span>Ð£ÑÑ‚Ñ€Ð¾Ð¹ÑÑ‚Ð²Ð°</div><div class="chart-wrap"><canvas id="dev-chart"></canvas></div></div>
+<div class="panel"><div class="panel-title"><span>👶</span>Топ имён детей</div><div id="names-wrap"><div class="no-data">Загрузка...</div></div></div>
+<div class="panel"><div class="panel-title"><span>📱</span>Устройства</div><div class="chart-wrap"><canvas id="dev-chart"></canvas></div></div>
 </div>
 
 <div class="panel" style="margin-bottom:24px">
-<div class="panel-title"><span>ðŸŽ</span>Ð¢Ð°Ð±Ð»Ð¸Ñ†Ð° Ð¾Ñ‚Ð·Ñ‹Ð²Ð¾Ð² Ð¸ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ¾Ð² (ÐžÐ¿Ñ€Ð¾Ñ + ÐŸÐ¾Ð´Ð°Ñ€ÐºÐ¸)</div>
+<div class="panel-title"><span>🎁</span>Таблица отзывов и вопросов (Опрос + Подарки)</div>
 <div class="table-toolbar">
 <select class="table-filter" id="f-review-scen" onchange="renderReviewsTable()">
-<option value="">Ð’ÑÐµ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¸ Ð¾Ð¿Ñ€Ð¾ÑÐ°</option>
-<option value="burnout">ðŸŸ¢ 1. Ð’Ñ‹Ð³Ð¾Ñ€Ð°Ð½Ð¸Ðµ Ñ€Ð¾Ð´Ð¸Ñ‚ÐµÐ»ÐµÐ¹</option>
-<option value="tantrums">ðŸ”µ 2. Ð˜ÑÑ‚ÐµÑ€Ð¸ÐºÐ¸ Ð¸ ÐºÐ°Ð¿Ñ€Ð¸Ð·Ñ‹</option>
-<option value="confidence">ðŸŸ¡ 3. Ð£Ð²ÐµÑ€ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ Ñ€ÐµÐ±Ñ‘Ð½ÐºÐ°</option>
-<option value="expert">ðŸŸ£ 4. Ð­ÐºÑÐ¿ÐµÑ€Ñ‚ / ÐŸÑÐ¸Ñ…Ð¾Ð»Ð¾Ð³</option>
+<option value="">Все сценарии опроса</option>
+<option value="burnout">🟢 1. Выгорание родителей</option>
+<option value="tantrums">🔵 2. Истерики и капризы</option>
+<option value="confidence">🟡 3. Уверенность ребёнка</option>
+<option value="expert">🟣 4. Эксперт / Психолог</option>
 </select>
-<button class="export-btn" onclick="exportReviewsCSV()">â¬‡ Ð­ÐºÑÐ¿Ð¾Ñ€Ñ‚ ÐžÑ‚Ð·Ñ‹Ð²Ð¾Ð² (CSV)</button>
+<button class="export-btn" onclick="exportReviewsCSV()">⬇ Экспорт Отзывов (CSV)</button>
 <span id="rev-count" style="color:var(--muted);font-size:12px;margin-left:auto"></span>
 </div>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Ð”Ð°Ñ‚Ð°/Ð’Ñ€ÐµÐ¼Ñ</th><th>Ð˜Ð¼Ñ</th><th>WhatsApp / TG / Email</th><th>Ð¡Ñ†ÐµÐ½Ð°Ñ€Ð¸Ð¹</th><th>ÐžÑ‚Ð²ÐµÑ‚Ñ‹ Ð½Ð° Ð¾Ð¿Ñ€Ð¾Ñ / ÐžÑ‚Ð·Ñ‹Ð²</th><th>Ð¡Ñ‚Ð°Ñ‚ÑƒÑ Ð¿Ð¾Ð´Ð°Ñ€ÐºÐ°</th></tr></thead>
+<thead><tr><th>Дата/Время</th><th>Имя</th><th>WhatsApp / TG / Email</th><th>Сценарий</th><th>Ответы на опрос / Отзыв</th><th>Статус подарка</th></tr></thead>
 <tbody id="rev-body"></tbody>
 </table>
 </div>
 </div>
 
 <div class="panel" style="margin-bottom:28px">
-<div class="panel-title"><span>ðŸ‘¤</span>Ð¡Ð¿Ð¸ÑÐ¾Ðº Ð¿Ð¾ÑÐµÑ‚Ð¸Ñ‚ÐµÐ»ÐµÐ¹ â€” Email / WhatsApp/TG / Ð˜Ð¼Ñ</div>
+<div class="panel-title"><span>👤</span>Список посетителей — Email / WhatsApp/TG / Имя</div>
 <div class="table-toolbar">
 <select class="table-filter" id="f-event" onchange="renderTable()">
-<option value="">Ð’ÑÐµ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ</option>
-<option value="Buy">ðŸ’³ ÐŸÐ¾ÐºÑƒÐ¿ÐºÐ°</option>
-<option value="Page_View">ðŸ‘ Ð’Ð¸Ð·Ð¸Ñ‚Ñ‹</option>
-<option value="Play_Click">ðŸŽµ Ð’Ð¾ÑÐ¿Ñ€Ð¾Ð¸Ð·Ð²ÐµÐ´ÐµÐ½Ð¸Ðµ</option>
-<option value="NDA_Signed">âœ… NDA</option>
-<option value="Voice_Recorded">ðŸŽ™ Ð—Ð°Ð¿Ð¸ÑÑŒ Ð³Ð¾Ð»Ð¾ÑÐ°</option>
-<option value="Email_Registration">ðŸ“§ Email Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ</option>
-<option value="Engaged">â± Ð’Ð¾Ð²Ð»ÐµÑ‡Ñ‘Ð½Ð½Ñ‹Ðµ</option>
+<option value="">Все события</option>
+<option value="Buy">💳 Покупка</option>
+<option value="Page_View">👁 Визиты</option>
+<option value="Play_Click">🎵 Воспроизведение</option>
+<option value="NDA_Signed">✅ NDA</option>
+<option value="Voice_Recorded">🎙 Запись голоса</option>
+<option value="Email_Registration">📧 Email регистрация</option>
+<option value="Engaged">⏱ Вовлечённые</option>
 </select>
 <select class="table-filter" id="f-lead" onchange="renderTable()">
-<option value="">Ð’ÑÐµ Ð¿Ð¾ÑÐµÑ‚Ð¸Ñ‚ÐµÐ»Ð¸</option>
-<option value="email">Ð¡ Email</option>
-<option value="phone">Ð¡ WhatsApp/TG</option>
-<option value="leads">Ð›Ð¸Ð´Ñ‹ (ÐºÐ¾Ð½Ñ‚Ð°ÐºÑ‚Ñ‹)</option>
+<option value="">Все посетители</option>
+<option value="email">С Email</option>
+<option value="phone">С WhatsApp/TG</option>
+<option value="leads">Лиды (контакты)</option>
 </select>
-<button class="copy-btn" onclick="copyEmails()">ðŸ“‹ ÐšÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Email</button>
-<button class="copy-btn" onclick="copyPhones()">ðŸ“ž ÐšÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ WhatsApp/TG</button>
-<button class="export-btn" onclick="exportCSV()">â¬‡ Ð­ÐºÑÐ¿Ð¾Ñ€Ñ‚ CSV</button>
+<button class="copy-btn" onclick="copyEmails()">📋 Копировать Email</button>
+<button class="copy-btn" onclick="copyPhones()">📞 Копировать WhatsApp/TG</button>
+<button class="export-btn" onclick="exportCSV()">⬇ Экспорт CSV</button>
 <span id="tbl-count" style="color:var(--muted);font-size:12px;margin-left:auto"></span>
 </div>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Ð’Ñ€ÐµÐ¼Ñ</th><th>Email</th><th>WhatsApp/TG</th><th>Ð˜Ð¼Ñ</th><th>Ð¡Ð¾Ð±Ñ‹Ñ‚Ð¸Ðµ</th><th>Ð Ð°Ð·Ð´ÐµÐ»</th><th>Ð¡ÐºÑ€Ð¾Ð»Ð»%</th><th>Ð’Ñ€ÐµÐ¼Ñ Ñ</th><th>Ð£ÑÑ‚Ñ€Ð¾Ð¹ÑÑ‚Ð²Ð¾</th><th>Ð˜ÑÑ‚Ð¾Ñ‡Ð½Ð¸Ðº</th><th>Ð¢Ð°Ñ€Ð¸Ñ„</th></tr></thead>
+<thead><tr><th>Время</th><th>Email</th><th>WhatsApp/TG</th><th>Имя</th><th>Событие</th><th>Раздел</th><th>Скролл%</th><th>Время с</th><th>Устройство</th><th>Источник</th><th>Тариф</th></tr></thead>
 <tbody id="tbl-body"></tbody>
 </table>
 </div>
@@ -251,7 +252,7 @@ let reviewsData = [];
 
 function loadDemo(){
   const evs=['Page_View','Generate_Click','Play_Click','Pricing_Viewed','Buy_Premium_Click','Buy_Basic_Click','Voice_Recorded','NDA_Signed','Engaged_30s','Engaged_60s','Auth_Modal_Opened','Emergency_Click'];
-  const names=['ÐœÐ°Ñ€Ð¸Ñ','ÐÐ½Ð½Ð°','Ð•Ð»ÐµÐ½Ð°','ÐžÐ»ÑŒÐ³Ð°','ÐÐ»ÐµÐºÑÐ°Ð½Ð´Ñ€','ÐÐ°Ð´ÐµÐ¶Ð´Ð°'];
+  const names=['Мария','Анна','Елена','Ольга','Александр','Надежда'];
   const emails=['user@gmail.com','anna@mail.ru','mama@yandex.ru','olga@icloud.com','elena@mail.ru'];
   const phones=['+7-999-123-45-67','+7-912-456-78-90'];
   const devs=['mobile','mobile','mobile','desktop','tablet'];
@@ -281,16 +282,16 @@ function loadDemo(){
     });
   }
   reviewsData = [
-    { timestamp: '01.08.2026, 15:42', name: 'ÐÐ½Ð½Ð° Ðœ.', contact: '+7 (912) 456-78-90 (WA)', scenario: 'burnout', scenarioTitle: 'ðŸŸ¢ Ð’Ñ‹Ð³Ð¾Ñ€Ð°Ð½Ð¸Ðµ', answers: '1) Ð£ÑÑ‚Ð°Ð»Ð¾ÑÑ‚ÑŒ Ð²ÐµÑ‡ÐµÑ€Ð¾Ð¼: 9/10. 2) ÐœÐµÑ‡Ñ‚Ð°ÑŽ Ð¾ Ð¼ÐµÐ´Ð¸Ñ‚Ð°Ñ†Ð¸Ð¸ Ð³Ð¾Ð»Ð¾ÑÐ¾Ð¼ Ð¼Ð°Ð¼Ñ‹. 3) ÐŸÑ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð¾Ñ‡ÐµÐ½ÑŒ Ð½ÑƒÐ¶Ð½Ð¾ Ð´Ð»Ñ Ð¼Ð°Ð¼Ñ‹!', status: 'ðŸŽ ÐŸÐ¾Ð´Ð°Ñ€Ð¾Ðº Ð²Ñ‹Ð´Ð°Ð½' },
-    { timestamp: '01.08.2026, 14:15', name: 'Ð•Ð»ÐµÐ½Ð° Ð’.', contact: '@elena_parent (TG)', scenario: 'tantrums', scenarioTitle: 'ðŸ”µ Ð˜ÑÑ‚ÐµÑ€Ð¸ÐºÐ¸', answers: '1) Ð§Ð°ÑÑ‚Ð¾Ñ‚Ð° ÐºÐ°Ð¿Ñ€Ð¸Ð·Ð¾Ð² Ð¿ÐµÑ€ÐµÐ´ ÑÐ½Ð¾Ð¼: 4-5 Ñ€Ð°Ð· Ð² Ð½ÐµÐ´ÐµÐ»ÑŽ. 2) Ð“Ð¾Ñ‚Ð¾Ð²Ð° Ð¿Ð»Ð°Ñ‚Ð¸Ñ‚ÑŒ Ð·Ð° ÑÐºÑÐ¿Ñ€ÐµÑÑ-Ñ€ÐµÐ¶Ð¸Ð¼. 3) Ð¡Ð¿Ð°ÑÐ¸Ð±Ð¾ Ð·Ð° Ð¿Ð¾Ð´Ð°Ñ€Ð¾Ðº!', status: 'ðŸŽ ÐŸÐ¾Ð´Ð°Ñ€Ð¾Ðº Ð²Ñ‹Ð´Ð°Ð½' },
-    { timestamp: '01.08.2026, 13:08', name: 'ÐžÐ»ÑŒÐ³Ð° Ðš.', contact: 'olga_m@icloud.com', scenario: 'confidence', scenarioTitle: 'ðŸŸ¡ Ð£Ð²ÐµÑ€ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ', answers: '1) Ð ÐµÐ±ÐµÐ½Ð¾Ðº ÑÑ‚ÐµÑÐ½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¹ Ð² Ð´ÐµÑ‚ÑÐ°Ð´Ñƒ. 2) ÐÑƒÐ¶ÐµÐ½ ÑƒÑ‚Ñ€ÐµÐ½Ð½Ð¸Ð¹ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ Ð½Ð° ÑƒÐ²ÐµÑ€ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ. 3) ÐŸÑ€Ð¾ÑˆÐ»Ð° Ð¾Ð¿Ñ€Ð¾Ñ Ñ€Ð°Ð´Ð¸ VIP-Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð°.', status: 'â³ Ð’ Ð¾Ð±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐµ' },
-    { timestamp: '01.08.2026, 11:30', name: 'Ð”Ð¼Ð¸Ñ‚Ñ€Ð¸Ð¹ Ð¡.', contact: '+7 (903) 777-88-99 (WA)', scenario: 'expert', scenarioTitle: 'ðŸŸ£ Ð­ÐºÑÐ¿ÐµÑ€Ñ‚', answers: '1) Ð”ÐµÑ‚ÑÐºÐ¸Ð¹ Ð½ÐµÐ¹Ñ€Ð¾Ð¿ÑÐ¸Ñ…Ð¾Ð»Ð¾Ð³. 2) Ð˜Ð½Ñ‚ÐµÑ€ÐµÑÑƒÐµÑ‚ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ñ ÐÐ³ÐµÐ½Ñ‚Ð¾Ð¼-Ð¡ÑƒÐ¿ÐµÑ€Ð²Ð¸Ð·Ð¾Ñ€Ð¾Ð¼. 3) Ð¥Ð¾Ñ‡Ñƒ ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾.', status: 'ðŸŽ ÐŸÐ¾Ð´Ð°Ñ€Ð¾Ðº Ð²Ñ‹Ð´Ð°Ð½' },
-    { timestamp: '31.07.2026, 19:22', name: 'ÐÐ°Ð´ÐµÐ¶Ð´Ð° ÐŸ.', contact: '@nadya_mama (TG)', scenario: 'burnout', scenarioTitle: 'ðŸŸ¢ Ð’Ñ‹Ð³Ð¾Ñ€Ð°Ð½Ð¸Ðµ', answers: '1) ÐÐµ Ñ…Ð²Ð°Ñ‚Ð°ÐµÑ‚ 1-2 Ñ‡Ð°ÑÐ¾Ð² Ð»Ð¸Ñ‡Ð½Ð¾Ð³Ð¾ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð² Ð´ÐµÐ½ÑŒ. 2) Ð Ð°ÑÑÐºÐ°Ð·Ñ‹-Ð¼ÐµÐ´Ð¸Ñ‚Ð°Ñ†Ð¸Ð¸ ÑÑƒÐ¿ÐµÑ€! 3) ÐŸÐ¾Ð´Ð°Ñ€Ð¾Ðº Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½.', status: 'ðŸŽ ÐŸÐ¾Ð´Ð°Ñ€Ð¾Ðº Ð²Ñ‹Ð´Ð°Ð½' }
+    { timestamp: '01.08.2026, 15:42', name: 'Анна М.', contact: '+7 (912) 456-78-90 (WA)', scenario: 'burnout', scenarioTitle: '🟢 Выгорание', answers: '1) Усталость вечером: 9/10. 2) Мечтаю о медитации голосом мамы. 3) Приложение очень нужно для мамы!', status: '🎁 Подарок выдан' },
+    { timestamp: '01.08.2026, 14:15', name: 'Елена В.', contact: '@elena_parent (TG)', scenario: 'tantrums', scenarioTitle: '🔵 Истерики', answers: '1) Частота капризов перед сном: 4-5 раз в неделю. 2) Готова платить за экспресс-режим. 3) Спасибо за подарок!', status: '🎁 Подарок выдан' },
+    { timestamp: '01.08.2026, 13:08', name: 'Ольга К.', contact: 'olga_m@icloud.com', scenario: 'confidence', scenarioTitle: '🟡 Уверенность', answers: '1) Ребенок стеснительный в детсаду. 2) Нужен утренний настрой на уверенность. 3) Прошла опрос ради VIP-доступа.', status: '⏳ В обработке' },
+    { timestamp: '01.08.2026, 11:30', name: 'Дмитрий С.', contact: '+7 (903) 777-88-99 (WA)', scenario: 'expert', scenarioTitle: '🟣 Эксперт', answers: '1) Детский нейропсихолог. 2) Интересует валидация Агентом-Супервизором. 3) Хочу сотрудничество.', status: '🎁 Подарок выдан' },
+    { timestamp: '31.07.2026, 19:22', name: 'Надежда П.', contact: '@nadya_mama (TG)', scenario: 'burnout', scenarioTitle: '🟢 Выгорание', answers: '1) Не хватает 1-2 часов личного времени в день. 2) Рассказы-медитации супер! 3) Подарок получен.', status: '🎁 Подарок выдан' }
   ];
   allRows.sort((a,b) => parseDateStr(b.timestamp) - parseDateStr(a.timestamp));
   stats=buildStats(allRows);
   renderAll();
-  showToast('Demo-Ð´Ð°Ð½Ð½Ñ‹Ðµ. Ð—Ð°Ð´ÐµÐ¿Ð»Ð¾Ð¹Ñ‚Ðµ Apps Script Ð´Ð»Ñ Ñ€ÐµÐ°Ð»ÑŒÐ½Ñ‹Ñ… Ð´Ð°Ð½Ð½Ñ‹Ñ….');
+  showToast('Demo-данные. Задеплойте Apps Script для реальных данных.');
 }
 
 function buildStats(rows){
@@ -328,21 +329,21 @@ function renderAll(){
   const dv=s.devices||{},mob=dv.mobile||0,des=dv.desktop||0,tab=(dv.tablet||0);
   const tot=mob+des+tab||1;
   animNum(document.getElementById('k-visits'),pv);
-  document.getElementById('k-sessions').textContent=(s.unique_sessions||0)+' ÑÐµÑÑÐ¸Ð¹';
+  document.getElementById('k-sessions').textContent=(s.unique_sessions||0)+' сессий';
   animNum(document.getElementById('k-events'),s.total_events||0);
-  document.getElementById('k-etypes').textContent=Object.keys(ec).length+' Ñ‚Ð¸Ð¿Ð¾Ð²';
+  document.getElementById('k-etypes').textContent=Object.keys(ec).length+' типов';
   animNum(document.getElementById('k-buys'),buys);
-  document.getElementById('k-conv').textContent='ÐºÐ¾Ð½Ð²ÐµÑ€ÑÐ¸Ñ '+(pv>0?Math.round(buys/pv*100):0)+'%';
+  document.getElementById('k-conv').textContent='конверсия '+(pv>0?Math.round(buys/pv*100):0)+'%';
   animNum(document.getElementById('k-emails'),s.unique_emails||0);
-  document.getElementById('k-phones').textContent=(s.unique_phones||0)+' Ñ‚ÐµÐ»ÐµÑ„Ð¾Ð½Ð¾Ð²';
+  document.getElementById('k-phones').textContent=(s.unique_phones||0)+' телефонов';
   animNum(document.getElementById('k-plays'),f.plays||0);
-  document.getElementById('k-gen').textContent=(f.meditations||0)+' Ð³ÐµÐ½ÐµÑ€Ð°Ñ†Ð¸Ð¹';
+  document.getElementById('k-gen').textContent=(f.meditations||0)+' генераций';
   animNum(document.getElementById('k-voices'),f.voices_recorded||0);
-  document.getElementById('k-nda').textContent=(f.nda_signed||0)+' NDA Ð¿Ð¾Ð´Ð¿Ð¸ÑÐµÐ¹';
+  document.getElementById('k-nda').textContent=(f.nda_signed||0)+' NDA подписей';
   document.getElementById('k-mobile').textContent=Math.round(mob/tot*100)+'%';
   document.getElementById('k-desktop').textContent=Math.round(des/tot*100)+'% desktop';
   document.getElementById('k-scroll').textContent=(s.avg_scroll_depth||0)+'%';
-  document.getElementById('k-time').textContent='Ð²Ñ€ÐµÐ¼Ñ '+(s.avg_time_on_page||0)+'Ñ';
+  document.getElementById('k-time').textContent='время '+(s.avg_time_on_page||0)+'с';
   renderFunnel(f,pv);
   renderBtns(ec);
   renderCharts();
@@ -353,13 +354,13 @@ function renderAll(){
 
 function renderFunnel(f,pv){
   const steps=[
-    {l:'ðŸ‘ Ð—Ð°ÑˆÐ»Ð¸ Ð½Ð° ÑÐ°Ð¹Ñ‚',c:f.page_views||0,col:'#F97316'},
-    {l:'ðŸ’° ÐŸÑ€Ð¾ÑÐ¼Ð¾Ñ‚Ñ€ÐµÐ»Ð¸ Ñ†ÐµÐ½Ñ‹',c:f.pricing_views||0,col:'#FB923C'},
-    {l:'ðŸ›’ ÐÐ°Ð¶Ð°Ð»Ð¸ ÐºÑƒÐ¿Ð¸Ñ‚ÑŒ',c:f.plan_clicks||0,col:'#22C55E'},
-    {l:'ðŸ’³ ÐŸÐ¾Ð¿Ñ‹Ñ‚ÐºÐ° Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹',c:f.payment_intents||0,col:'#06B6D4'},
-    {l:'âœ… ÐŸÐ¾Ð´Ð¿Ð¸ÑÐ°Ð»Ð¸ NDA',c:f.nda_signed||0,col:'#A855F7'},
-    {l:'ðŸŽµ Ð¡Ð»ÑƒÑˆÐ°Ð»Ð¸ Ð¼ÐµÐ´Ð¸Ñ‚Ð°Ñ†Ð¸ÑŽ',c:f.plays||0,col:'#EAB308'},
-    {l:'ðŸŽ™ Ð—Ð°Ð¿Ð¸ÑÐ°Ð»Ð¸ Ð³Ð¾Ð»Ð¾Ñ',c:f.voices_recorded||0,col:'#F43F5E'},
+    {l:'👁 Зашли на сайт',c:f.page_views||0,col:'#F97316'},
+    {l:'💰 Просмотрели цены',c:f.pricing_views||0,col:'#FB923C'},
+    {l:'🛒 Нажали купить',c:f.plan_clicks||0,col:'#22C55E'},
+    {l:'💳 Попытка оплаты',c:f.payment_intents||0,col:'#06B6D4'},
+    {l:'✅ Подписали NDA',c:f.nda_signed||0,col:'#A855F7'},
+    {l:'🎵 Слушали медитацию',c:f.plays||0,col:'#EAB308'},
+    {l:'🎙 Записали голос',c:f.voices_recorded||0,col:'#F43F5E'},
   ];
   const mx=Math.max(...steps.map(s=>s.c),1);
   document.getElementById('funnel-wrap').innerHTML=steps.map(s=>{
@@ -374,12 +375,12 @@ function renderBtns(ec){
   const sorted=Object.entries(ec).sort((a,b)=>b[1]-a[1]).slice(0,14);
   const mx=sorted.length?sorted[0][1]:1;
   const cm={'Buy':'#22C55E','Play':'#06B6D4','Page_View':'#F97316','Pricing':'#EAB308','NDA':'#A855F7','Voice':'#F43F5E','Generate':'#3B82F6','Engaged':'#8B5CF6','Emergency':'#EF4444'};
-  const lm={'Page_View':'ðŸ‘ Ð—Ð°Ñ…Ð¾Ð´ Ð½Ð° ÑÐ°Ð¹Ñ‚','Generate_Click':'âœ¨ Ð“ÐµÐ½ÐµÑ€Ð°Ñ†Ð¸Ñ Ð¼ÐµÐ´Ð¸Ñ‚Ð°Ñ†Ð¸Ð¸','Play_Click':'â–¶ Ð’Ð¾ÑÐ¿Ñ€Ð¾Ð¸Ð·Ð²ÐµÐ´ÐµÐ½Ð¸Ðµ','Pricing_Viewed':'ðŸ’° ÐŸÑ€Ð¾ÑÐ¼Ð¾Ñ‚Ñ€ Ñ†ÐµÐ½','Buy_Basic_Click':'ðŸ’³ ÐšÑƒÐ¿Ð¸Ñ‚ÑŒ Basic','Buy_Premium_Click':'ðŸ’³ ÐšÑƒÐ¿Ð¸Ñ‚ÑŒ Premium','Buy_Pro_Click':'ðŸ’³ ÐšÑƒÐ¿Ð¸Ñ‚ÑŒ Pro','Voice_Recorded':'ðŸŽ™ Ð—Ð°Ð¿Ð¸ÑÑŒ Ð³Ð¾Ð»Ð¾ÑÐ°','NDA_Signed':'âœ… NDA Ð¿Ð¾Ð´Ð¿Ð¸ÑÑŒ','Engaged_30s':'â± 30Ñ Ð½Ð° ÑÐ°Ð¹Ñ‚Ðµ','Engaged_60s':'â± 60Ñ Ð½Ð° ÑÐ°Ð¹Ñ‚Ðµ','Engaged_120s':'â± 2Ð¼Ð¸Ð½ Ð½Ð° ÑÐ°Ð¹Ñ‚Ðµ','Emergency_Click':'ðŸš¨ Ð­ÐºÑÑ‚Ñ€ÐµÐ½Ð½Ñ‹Ð¹','Auth_Modal_Opened':'ðŸ” Ð’Ñ…Ð¾Ð´','CustDev_Submitted':'ðŸ“ ÐžÐ¿Ñ€Ð¾Ñ'};
+  const lm={'Page_View':'👁 Заход на сайт','Generate_Click':'✨ Генерация медитации','Play_Click':'▶ Воспроизведение','Pricing_Viewed':'💰 Просмотр цен','Buy_Basic_Click':'💳 Купить Basic','Buy_Premium_Click':'💳 Купить Premium','Buy_Pro_Click':'💳 Купить Pro','Voice_Recorded':'🎙 Запись голоса','NDA_Signed':'✅ NDA подпись','Engaged_30s':'⏱ 30с на сайте','Engaged_60s':'⏱ 60с на сайте','Engaged_120s':'⏱ 2мин на сайте','Emergency_Click':'🚨 Экстренный','Auth_Modal_Opened':'🔐 Вход','CustDev_Submitted':'📝 Опрос'};
   function gc(n){for(const[k,v] of Object.entries(cm))if(n.includes(k))return v;return '#64748B';}
   document.getElementById('btn-wrap').innerHTML=sorted.map(([n,c])=>{
     const p=Math.round(c/mx*100);
     return '<div class="btn-stat-row"><div class="btn-stat-name">'+(lm[n]||n)+'</div><div class="btn-stat-bar-bg"><div class="btn-stat-fill" style="width:0%;background:'+gc(n)+'" data-w="'+p+'%"></div></div><div class="btn-stat-count">'+c+'</div></div>';
-  }).join('')||'<div class="no-data">ÐÐµÑ‚ Ð´Ð°Ð½Ð½Ñ‹Ñ…</div>';
+  }).join('')||'<div class="no-data">Нет данных</div>';
   setTimeout(()=>document.querySelectorAll('.btn-stat-fill').forEach(b=>b.style.width=b.dataset.w),50);
 }
 
@@ -387,21 +388,21 @@ function renderCharts(){
   const hc=stats.hourly_clicks||{};
   const hrs=Array.from({length:24},(_,i)=>String(i).padStart(2,'0'));
   if(hChart)hChart.destroy();
-  hChart=new Chart(document.getElementById('hourly-chart'),{type:'bar',data:{labels:hrs.map(h=>h+':00'),datasets:[{label:'ÐšÐ»Ð¸ÐºÐ¸',data:hrs.map(h=>hc[h]||0),backgroundColor:'rgba(249,115,22,0.6)',borderColor:'#F97316',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#94A3B8',maxRotation:0,font:{size:9}},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#94A3B8',font:{size:10}},grid:{color:'rgba(255,255,255,0.05)'}}}}});
+  hChart=new Chart(document.getElementById('hourly-chart'),{type:'bar',data:{labels:hrs.map(h=>h+':00'),datasets:[{label:'Клики',data:hrs.map(h=>hc[h]||0),backgroundColor:'rgba(249,115,22,0.6)',borderColor:'#F97316',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#94A3B8',maxRotation:0,font:{size:9}},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#94A3B8',font:{size:10}},grid:{color:'rgba(255,255,255,0.05)'}}}}});
   const rf=stats.referrers||{};
   const rk=Object.keys(rf).slice(0,6);
   if(rChart)rChart.destroy();
-  rChart=new Chart(document.getElementById('ref-chart'),{type:'doughnut',data:{labels:rk.length?rk:['ÐÐµÑ‚ Ð´Ð°Ð½Ð½Ñ‹Ñ…'],datasets:[{data:rk.length?rk.map(k=>rf[k]):[1],backgroundColor:['#F97316','#06B6D4','#22C55E','#A855F7','#EAB308','#EF4444'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{size:11},boxWidth:12}}}}});
+  rChart=new Chart(document.getElementById('ref-chart'),{type:'doughnut',data:{labels:rk.length?rk:['Нет данных'],datasets:[{data:rk.length?rk.map(k=>rf[k]):[1],backgroundColor:['#F97316','#06B6D4','#22C55E','#A855F7','#EAB308','#EF4444'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{size:11},boxWidth:12}}}}});
   const dv=stats.devices||{};
   const dk=Object.keys(dv);
-  const dl={'mobile':'ðŸ“± Mobile','desktop':'ðŸ–¥ Desktop','tablet':'ðŸ“± Tablet','unknown':'â“'};
+  const dl={'mobile':'📱 Mobile','desktop':'🖥 Desktop','tablet':'📱 Tablet','unknown':'❓'};
   if(dChart)dChart.destroy();
-  dChart=new Chart(document.getElementById('dev-chart'),{type:'doughnut',data:{labels:dk.length?dk.map(k=>dl[k]||k):['ÐÐµÑ‚'],datasets:[{data:dk.length?dk.map(k=>dv[k]):[1],backgroundColor:['#06B6D4','#F97316','#22C55E','#64748B'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{size:11},boxWidth:12}}}}});
+  dChart=new Chart(document.getElementById('dev-chart'),{type:'doughnut',data:{labels:dk.length?dk.map(k=>dl[k]||k):['Нет'],datasets:[{data:dk.length?dk.map(k=>dv[k]):[1],backgroundColor:['#06B6D4','#F97316','#22C55E','#64748B'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{size:11},boxWidth:12}}}}});
 }
 
 function renderNames(cn){
   const s=Object.entries(cn).sort((a,b)=>b[1]-a[1]).slice(0,20);
-  document.getElementById('names-wrap').innerHTML=s.length?s.map(([n,c])=>'<span class="name-pill">'+n+'<span class="name-cnt">'+c+'</span></span>').join(''):'<div class="no-data">ÐÐµÑ‚ Ð´Ð°Ð½Ð½Ñ‹Ñ…</div>';
+  document.getElementById('names-wrap').innerHTML=s.length?s.map(([n,c])=>'<span class="name-pill">'+n+'<span class="name-cnt">'+c+'</span></span>').join(''):'<div class="no-data">Нет данных</div>';
 }
 
 function renderReviewsTable(){
@@ -409,7 +410,7 @@ function renderReviewsTable(){
   let list = [...reviewsData];
   if(scFilter) list = list.filter(r => r.scenario === scFilter);
   const cntEl = document.getElementById('rev-count');
-  if(cntEl) cntEl.textContent = 'ÐŸÐ¾ÐºÐ°Ð·Ð°Ð½Ð¾ Ð¾Ñ‚Ð·Ñ‹Ð²Ð¾Ð²: ' + list.length;
+  if(cntEl) cntEl.textContent = 'Показано отзывов: ' + list.length;
   const tbody = document.getElementById('rev-body');
   if(tbody) {
     tbody.innerHTML = list.map(r => `
@@ -419,19 +420,19 @@ function renderReviewsTable(){
         <td><span style="color:var(--cyan)">${r.contact}</span></td>
         <td>${r.scenarioTitle}</td>
         <td style="white-space:normal;min-width:280px;line-height:1.4">${r.answers}</td>
-        <td><span class="ev-badge ${r.status.includes('Ð²Ñ‹Ð´Ð°Ð½')?'ev-buy':'ev-nda'}">${r.status}</span></td>
+        <td><span class="ev-badge ${r.status.includes('выдан')?'ev-buy':'ev-nda'}">${r.status}</span></td>
       </tr>
-    `).join('') || '<tr><td colspan="6" class="no-data">ÐžÑ‚Ð·Ñ‹Ð²Ð¾Ð² Ð¿Ð¾ÐºÐ° Ð½ÐµÑ‚</td></tr>';
+    `).join('') || '<tr><td colspan="6" class="no-data">Отзывов пока нет</td></tr>';
   }
 }
 
 function exportReviewsCSV(){
-  const h = ['Ð”Ð°Ñ‚Ð°','Ð˜Ð¼Ñ','ÐšÐ¾Ð½Ñ‚Ð°ÐºÑ‚Ñ‹','Ð¡Ñ†ÐµÐ½Ð°Ñ€Ð¸Ð¹','ÐžÑ‚Ð²ÐµÑ‚Ñ‹_ÐžÑ‚Ð·Ñ‹Ð²','Ð¡Ñ‚Ð°Ñ‚ÑƒÑ_ÐŸÐ¾Ð´Ð°Ñ€ÐºÐ°'];
+  const h = ['Дата','Имя','Контакты','Сценарий','Ответы_Отзыв','Статус_Подарка'];
   const r = reviewsData.map(r => [r.timestamp, r.name, r.contact, r.scenarioTitle, r.answers, r.status].map(v => '"' + (v||'').toString().replace(/"/g,'""') + '"').join(','));
   const csv = [h.join(','), ...r].join('\n');
   const b = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'mindecho_reviews_' + new Date().toISOString().split('T')[0] + '.csv'; a.click();
-  showToast('ðŸ“¥ Ð¢Ð°Ð±Ð»Ð¸Ñ†Ð° Ð¾Ñ‚Ð·Ñ‹Ð²Ð¾Ð² ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð° Ð² CSV!');
+  showToast('📥 Таблица отзывов сохранена в CSV!');
 }
 
 function renderTable(){
@@ -442,7 +443,7 @@ function renderTable(){
   if(lf==='email')rows=rows.filter(r=>r.email&&r.email!=='-');
   else if(lf==='phone')rows=rows.filter(r=>r.phone&&r.phone!=='-');
   else if(lf==='leads')rows=rows.filter(r=>(r.email&&r.email!=='-')||(r.phone&&r.phone!=='-'));
-  document.getElementById('tbl-count').textContent='ÐŸÐ¾ÐºÐ°Ð·Ð°Ð½Ð¾: '+rows.length+' Ð¸Ð· '+allRows.length;
+  document.getElementById('tbl-count').textContent='Показано: '+rows.length+' из '+allRows.length;
   const cm={'Buy':'ev-buy','Play':'ev-play','Page_View':'ev-view','Engaged':'ev-engage','NDA':'ev-nda'};
   function ec(n){for(const[k,v]of Object.entries(cm))if(n&&n.includes(k))return v;return 'ev-def';}
   document.getElementById('tbl-body').innerHTML=rows.slice(0,200).map(r=>`
@@ -454,22 +455,22 @@ function renderTable(){
 <td><span class="ev-badge ${ec(r.event_type)}">${r.event_type||'-'}</span></td>
 <td style="color:var(--muted)">${r.page_section||'-'}</td>
 <td>${r.scroll_depth>0?'<span style="color:var(--orange)">'+r.scroll_depth+'%</span>':'-'}</td>
-<td>${r.time_on_page>0?r.time_on_page+'Ñ':'-'}</td>
+<td>${r.time_on_page>0?r.time_on_page+'с':'-'}</td>
 <td>${r.device_type||'-'}</td>
 <td style="color:var(--muted)">${r.referrer||'-'}</td>
 <td>${r.plan_name&&r.plan_name!=='-'?'<span style="color:var(--yellow)">'+r.plan_name+'</span>':'-'}</td>
-</tr>`).join('')||'<tr><td colspan="11" class="no-data">ÐÐµÑ‚ Ð´Ð°Ð½Ð½Ñ‹Ñ…</td></tr>';
+</tr>`).join('')||'<tr><td colspan="11" class="no-data">Нет данных</td></tr>';
 }
 
-function copyEmails(){const l=(stats.email_list||[]).join('\n');navigator.clipboard.writeText(l).then(()=>showToast('Ð¡ÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¾ '+(stats.email_list||[]).length+' email'));}
-function copyPhones(){const l=(stats.phone_list||[]).join('\n');navigator.clipboard.writeText(l).then(()=>showToast('Ð¡ÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¾ '+(stats.phone_list||[]).length+' Ñ‚ÐµÐ»ÐµÑ„Ð¾Ð½Ð¾Ð²'));}
+function copyEmails(){const l=(stats.email_list||[]).join('\n');navigator.clipboard.writeText(l).then(()=>showToast('Скопировано '+(stats.email_list||[]).length+' email'));}
+function copyPhones(){const l=(stats.phone_list||[]).join('\n');navigator.clipboard.writeText(l).then(()=>showToast('Скопировано '+(stats.phone_list||[]).length+' телефонов'));}
 function exportCSV(){
-  const h=['Ð’Ñ€ÐµÐ¼Ñ','Email','Ð¢ÐµÐ»ÐµÑ„Ð¾Ð½','Ð˜Ð¼Ñ','Ð¡Ð¾Ð±Ñ‹Ñ‚Ð¸Ðµ','Ð Ð°Ð·Ð´ÐµÐ»','Ð¡ÐºÑ€Ð¾Ð»Ð»%','Ð’Ñ€ÐµÐ¼Ñ_Ñ','Ð£ÑÑ‚Ñ€Ð¾Ð¹ÑÑ‚Ð²Ð¾','Ð˜ÑÑ‚Ð¾Ñ‡Ð½Ð¸Ðº','Ð¢Ð°Ñ€Ð¸Ñ„','Ð¦ÐµÐ½Ð°'];
+  const h=['Время','Email','Телефон','Имя','Событие','Раздел','Скролл%','Время_с','Устройство','Источник','Тариф','Цена'];
   const r=allRows.map(r=>[r.timestamp,r.email,r.phone,r.user_name,r.event_type,r.page_section,r.scroll_depth,r.time_on_page,r.device_type,r.referrer,r.plan_name,r.price].map(v=>'"'+(v||'').toString().replace(/"/g,'""')+'"').join(','));
   const csv=[h.join(','),...r].join('\n');
   const b=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='mindecho_leads_'+new Date().toISOString().split('T')[0]+'.csv';a.click();
-  showToast('CSV ÑÐ¾Ñ…Ñ€Ð°Ð½Ñ‘Ð½!');
+  showToast('CSV сохранён!');
 }
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500);}
 
