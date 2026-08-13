@@ -1,0 +1,1 @@
+{"detail":{"type":"validation_error","code":"invalid_voice_settings","message":"Invalid setting for speed received, expected to be greater or equal to 0.7 and less or equal to 1.2, received 0.5.","status":"invalid_voice_settings","request_id":"d6c9ec6cca5d3a082902e59eb7091337","param":"voice_settings"}}
