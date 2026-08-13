@@ -1,0 +1,10 @@
+{
+    "model_id":  "eleven_multilingual_v2",
+    "text":  "Дорогой мой... \u003cbreak time=\"1.5s\"/\u003e родной человечек, Аня... — \u003cbreak time=\"3.5s\"/\u003e\n\nДавай отправимся... \u003cbreak time=\"1.5s\"/\u003e в волшебную, \u003cbreak time=\"1.5s\"/\u003e тихую Сказку-Медитацию... — \u003cbreak time=\"3.5s\"/\u003e\n\nЗакрой глазки... \u003cbreak time=\"1.5s\"/\u003e и начни дышать спокойно... \u003cbreak time=\"1.5s\"/\u003e и ровно... — \u003cbreak time=\"3.5s\"/\u003e\n\nСделай мягкий, \u003cbreak time=\"1.5s\"/\u003e глубокий вдох... \u003cbreak time=\"1.5s\"/\u003e и плавный, \u003cbreak time=\"1.5s\"/\u003e медленный выдох... — \u003cbreak time=\"3.5s\"/\u003e\n\nТы в полной... \u003cbreak time=\"1.5s\"/\u003e абсолютной безопасности... — \u003cbreak time=\"3.5s\"/\u003e\n\nСтены уютной комнаты... \u003cbreak time=\"1.5s\"/\u003e бережно охраняют твой покой... — \u003cbreak time=\"3.5s\"/\u003e\n\nЗнай, \u003cbreak time=\"1.5s\"/\u003e что мама и папа... \u003cbreak time=\"1.5s\"/\u003e тебя очень сильно любят... \u003cbreak time=\"1.5s\"/\u003e и всегда рядом с тобой... — \u003cbreak time=\"3.5s\"/\u003e\n\nОтдыхай... \u003cbreak time=\"1.5s\"/\u003e настраивайся на добрые, \u003cbreak time=\"1.5s\"/\u003e сказочные сны, Аня... — \u003cbreak time=\"3.5s\"/\u003e\n\nЯ очень... \u003cbreak time=\"1.5s\"/\u003e очень люблю тебя... — \u003cbreak time=\"3.5s\"/\u003e",
+    "voice_settings":  {
+                           "similarity_boost":  0.8,
+                           "style":  0,
+                           "speed":  0.7,
+                           "stability":  0.6
+                       }
+}
